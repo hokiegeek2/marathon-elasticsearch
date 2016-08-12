@@ -1,0 +1,47 @@
+{
+  "id": "/hokiegeek2/elasticsearch",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 512,
+  "disk": 0,
+  "instances": 3,
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "elasticsearch",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 9200,
+          "hostPort": 0,
+          "servicePort": 10017,
+          "protocol": "tcp",
+          "labels": {}
+        },
+        {
+          "containerPort": 9300,
+          "hostPort": 0,
+          "servicePort": 10018,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
+    }
+  },
+  "portDefinitions": [
+    {
+      "port": 10017,
+      "protocol": "tcp",
+      "labels": {}
+    },
+    {
+      "port": 10018,
+      "protocol": "tcp",
+      "labels": {}
+    }
+  ]
+}

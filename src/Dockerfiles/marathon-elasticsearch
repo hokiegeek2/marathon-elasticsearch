@@ -1,0 +1,46 @@
+FROM centos:7
+
+RUN yum update -y && yum install -y which wget unzip vi
+
+#
+# Install Java
+#
+WORKDIR /deploy
+RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.rpm
+RUN yum install -y jdk-8u66-linux-x64.rpm
+
+#
+# Add python script
+#
+ADD main/python/ /deploy/python
+
+#
+# Install Elasticsearch
+#
+ADD main/resources/json /deploy/json
+ADD main/resources/scripts /deploy/scripts
+RUN chmod +x /deploy/scripts/bootstrap-cluster.sh
+ADD elasticsearch-2.3.5.zip /deploy/elasticsearch-2.3.5.zip
+RUN unzip elasticsearch-2.3.5.zip
+
+#
+# Cleanup
+#
+RUN rm /deploy/elasticsearch-2.3.5.zip /deploy/jdk-8u66-linux-x64.rpm
+
+#
+# Configure Environment
+#
+EXPOSE 9200 9300
+ENTRYPOINT /deploy/scripts/bootstrap-cluster.sh
+ENV PYTHONPATH /deploy/python
+
+#
+# Provision elasticsearch user
+#
+RUN mkdir /data
+RUN chmod 777 /data
+RUN useradd -u 1206 -r elasticsearch
+RUN chown -R elasticsearch:elasticsearch /deploy
+RUN usermod -aG wheel elasticsearch
+USER elasticsearch
