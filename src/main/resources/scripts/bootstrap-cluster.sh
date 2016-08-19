@@ -1,12 +1,10 @@
 #!/bin/bash
 hosts=$(python -c 'import os; from marathon.elasticsearch import resource_management; hosts = resource_management.getMarathonAppHosts(os.getenv("MARATHON_URL") + "/v2/apps/" + os.getenv("APP_NAME")); print(hosts)')
 
-host_name=$(python -c 'import os; from marathon.elasticsearch import resource_management; host = resource_management.getHost(os.getenv("HOSTNAME"), os.getenv("PORT1")); print(host)')
-
 host=$(python -c 'import os; host = str(os.getenv("HOST")).split(".")[0].strip("ip-").replace("-","."); print(host)')
 
-echo $hosts
-echo $host_name
+transport_port=$(python -c 'from marathon.elasticsearch import resource_management; tp = resource_management.getTransportBindPort(); print(tp)')
+
 exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --node.name=$host \
 --cluster.name=hokiegeek2 \
@@ -19,8 +17,5 @@ exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --discovery.zen.join_timeout=300s \
 --discovery.zen.publish_timeout=300s \
 --http.port=$PORT0 \
---transport.tcp.port=$PORT1 \
+--transport.tcp.port=$transport_port \
 --transport.publish_port=$PORT1
-#--network.publish_host=$host_name \
-
-
