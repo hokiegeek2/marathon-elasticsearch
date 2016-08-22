@@ -17,28 +17,39 @@ def getTransportBindPort():
     else:
         raise ValueError("The NETWORK_MODE environment variable must equal BRIDGE or HOST")
 
-def generateIpAddressFromDNS(host):
-    return host.split(".")[0].strip("ip-").replace("-",".")
+def getNodeName():
+    nodeName = ""
+    nodeName += os.getenv("HOST")
+    nodeName += ":"
+    nodeName += str(os.getenv("PORT0"))
+    return nodeName
+
+def getAppNames():
+    appNames = os.getenv("APP_NAME")
+    if "," in appNames:
+        return appNames.split(",")
+    return [appNames]
+
+def getAppURL(appName):
+    return os.getenv("MARATHON_URL") + "/v2/apps/" + appName
 
 def getHost():
-    mode = getNetworkMode()
-    if (mode == "BRIDGE"):
-        return os.getenv("HOST")
+    return os.getenv("HOST")
     
-
 def getMarathonAppJSON(url):
     raw_json = os.popen("curl " + url).read()
     return json.loads(raw_json)
 
-def getMarathonAppHosts(url):
+def getMarathonAppHosts():
+    appNames = getAppNames()
+   
     hosts = ""
-    app_json = getMarathonAppJSON(url)
-    for app in app_json["app"]["tasks"]:
-       #hosts += generateIpAddressFromDNS(app["host"])
-       hosts += app["host"]
-       hosts += ":"
-       hosts += str(app["ports"][1])
-       hosts += ","
-    
-    final_hosts = hosts.strip(",")
-    return final_hosts
+    for app in appNames:
+        url = getAppURL(app)
+        app_json = getMarathonAppJSON(url)
+        for app in app_json["app"]["tasks"]:
+            hosts += app["host"]
+            hosts += ":"
+            hosts += str(app["ports"][1])
+            hosts += ","
+    return hosts.strip(",")
