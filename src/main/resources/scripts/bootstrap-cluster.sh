@@ -15,6 +15,6 @@ exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --discovery.zen.ping_timeout=90s \
 --discovery.zen.join_timeout=300s \
 --discovery.zen.publish_timeout=300s \
---http.port=$PORT0 \
+--http.port=9200 \
 --transport.tcp.port=$transport_port \
 --transport.publish_port=$PORT1
