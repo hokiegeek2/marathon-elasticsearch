@@ -53,3 +53,18 @@ def getMarathonAppHosts():
             hosts += str(app["ports"][1])
             hosts += ","
     return hosts.strip(",")
+
+def getMarathonESNodes():
+    appNames = getAppNames()
+    nodes = list()
+    for app in appNames:
+        url = getAppURL(app)
+        app_json = getMarathonAppJSON(url)
+        for app in app_json["app"]["tasks"]:
+            node = ""
+            node += app["host"]
+            node += ":"
+            node += str(app["ports"][0])
+        nodes.append(node)    
+    return nodes 
+    
