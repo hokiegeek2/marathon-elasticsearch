@@ -1,0 +1,14 @@
+FROM centos:7
+
+RUN yum update -y && yum install -y which wget unzip vi
+
+WORKDIR /deploy
+
+#
+# Add python and bootstrap scripts as well as json configs
+#
+ADD main/python/ /deploy/python
+ADD main/resources/json /deploy/json
+ADD main/resources/scripts /deploy/scripts
+RUN chmod +x /deploy/scripts/*
+ENV PYTHONPATH /deploy/python

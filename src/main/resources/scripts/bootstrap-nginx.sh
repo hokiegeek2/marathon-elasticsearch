@@ -1,3 +1,4 @@
 #!/bin/bash
-nodes=$(python -c 'from marathon.elasticsearch import resource_management; nodes = resource_management.getMarathonESNodes(); print(es_nodes)')
+python -c 'from marathon.nginx import nginx_resource_management; nginx_resource_management.writeConfFile()'
 
+exec nginx -g daemon off
