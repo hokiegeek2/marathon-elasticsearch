@@ -1,8 +1,12 @@
-FROM marathon-es-cluster-base
+FROM hokiegeek2/marathon-es-cluster-base
 
-RUN /usr/local/bin/yum-install nginx
+RUN yum install -y epel-release
+RUN yum install -y nginx
 
-ENTRYPOINT bootstrap-nginx.sh
+ADD main/resources/scripts /deploy/scripts
+ADD main/python/ /deploy/python
+RUN chmod +x /deploy/scripts/*
+ENTRYPOINT /deploy/scripts/bootstrap-nginx.sh
 
 # Expose ports.
 EXPOSE 80
