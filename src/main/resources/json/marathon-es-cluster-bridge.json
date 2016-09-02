@@ -1,0 +1,68 @@
+{
+  "id": "<id>",
+  "cmd": null,
+  "cpus": <cpu cores>,
+  "mem": <memory>,
+  "disk": <diskspace for storage of ES shards>,
+  "instances": <number of instances>,
+  "constraints": [
+    [
+      "hostname",
+      "LIKE",
+      "<host dns or ip>"
+    ],
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "hokiegeek2/marathon-elasticsearch",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 9200,
+          "hostPort": 0,
+          "servicePort": 10222,
+          "protocol": "tcp",
+          "labels": {}
+        },
+        {
+          "containerPort": 9300,
+          "hostPort": 0,
+          "servicePort": 10223,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [
+        {
+          "key": "volume",
+          "value": "/data-1:/data"
+        }
+      ],
+      "forcePullImage": true
+    }
+  },
+  "env": {
+    "MARATHON_URL": "<marathon dns or ip>:8080",
+    "APP_NAME": "<marathon app name(s), comma-delimited">
+    "NETWORK_MODE": "BRIDGE"
+  },
+  "portDefinitions": [
+    {
+      "port": 10222,
+      "protocol": "tcp",
+      "labels": {}
+    },
+    {
+      "port": 10223,
+      "protocol": "tcp",
+      "labels": {}
+    }
+  ]
+}
