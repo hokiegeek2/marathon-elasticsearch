@@ -1,4 +1,4 @@
-import os
+import os, json
 from marathon.elasticsearch import resource_management
 
 __all__ = '''
@@ -34,3 +34,14 @@ def writeConfFile():
 
 def getESNodes():
     return resource_management.getMarathonESNodes()
+
+def getNginxHost():
+    nginx_name = os.getenv("NGINX_APP_NAME")
+    nginx_url = resource_management.getAppURL(nginx_name)
+    json_data = resource_management.getMarathonAppJSON(nginx_url)
+    app_host = json_data["app"]["tasks"][0]
+    host_string = ""
+    host_string += app_host["host"]
+    host_string += ":"
+    host_string += app_host["port"]
+    return host_string

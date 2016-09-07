@@ -1,0 +1,24 @@
+FROM hokiegeek2/marathon-es-cluster-base
+
+
+# 
+#Install and cleanup Kibana
+#
+RUN wget https://download.elastic.co/kibana/kibana/kibana-4.6.1-x86_64.rpm
+RUN rpm -Uvh kibana-4.6.1-x86_64.rpm
+RUN rm /deploy/kibana-4.6.1-x86_64.rpm
+
+
+#
+# Define entrypoint and port
+#
+EXPOSE 5601
+ENTRYPOINT /deploy/bootstrap-kibana.sh
+
+#
+# Provision kibana user
+#
+RUN useradd -u 1206 -r kibana
+RUN chown -R kibana:e /deploy
+RUN usermod -aG wheel kibana
+USER kibana
