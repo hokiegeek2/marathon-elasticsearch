@@ -1,4 +1,4 @@
-FROM es-cluster-base
+FROM hokiegeek2/marathon-es-cluster-base:20160912
 
 #
 # Install Java
@@ -28,4 +28,6 @@ RUN chmod 777 /data
 RUN useradd -u 1206 -r elasticsearch
 RUN chown -R elasticsearch:elasticsearch /deploy
 RUN usermod -aG wheel elasticsearch
+RUN sed -i 's/Defaults[ ]* requiretty/#Defaults      requiretty/g' /etc/sudoers
+RUN echo "elasticsearch ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER elasticsearch
