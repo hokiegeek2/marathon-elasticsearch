@@ -3,9 +3,6 @@ FROM hokiegeek2/marathon-es-cluster-base
 RUN yum install -y epel-release
 RUN yum install -y nginx
 
-ADD main/resources/scripts /deploy/scripts
-ADD main/python/ /deploy/python
-RUN chmod +x /deploy/scripts/*
 ENTRYPOINT /deploy/scripts/bootstrap-nginx.sh
 
 # Expose ports.

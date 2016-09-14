@@ -20,6 +20,7 @@ def writeConfFile():
         fout.write("\t server { \n")
         fout.write("\t\t listen " + port + ";\n")
         fout.write("\t\t location / { \n")
+        fout.write("\t\t client_max_body_size 1G; \n")
         fout.write("\t\t\t proxy_pass http://elasticsearch_servers; \n")
         fout.write("\t\t\t proxy_http_version 1.1; \n")
         fout.write("\t\t } \n")
