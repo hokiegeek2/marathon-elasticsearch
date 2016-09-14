@@ -1,5 +1,8 @@
 import os,json
 
+min_num_master_nodes = None
+cluster_name = None
+
 __all__ = '''
   getMarathonAppJSON
   getMarathonAppPorts
@@ -68,4 +71,15 @@ def getMarathonESNodes():
             node += str(app["ports"][0])
             nodes.append(node)    
     return nodes 
-    
+
+def getMinNumMasterNodes():
+    min_num_master_nodes = os.getenv("MIN_NUM_MASTER_NODES")
+    if min_num_master_nodes == None:
+        raise ValueError("MIN_NUM_MASTER_NODES environment variable must be set") 
+    return min_num_master_nodes
+
+def getClusterName():
+    cluster_name = os.getenv("CLUSTER_NAME")
+    if cluster_name == None:
+        cluster_name = "Marathon-ES-Cluster"
+    return cluster_name
