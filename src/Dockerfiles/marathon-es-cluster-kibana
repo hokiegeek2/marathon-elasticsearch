@@ -12,6 +12,6 @@ RUN chown -R kibana:kibana /opt/kibana
 # Define entrypoint and port
 #
 EXPOSE 5601
-ENTRYPOINT /deploy/bootstrap-kibana.sh
+ENTRYPOINT /deploy/scripts/bootstrap-kibana.sh
 
 USER kibana

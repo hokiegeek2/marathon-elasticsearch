@@ -44,8 +44,8 @@ def getNginxHost():
     nginx_url = resource_management.getAppURL(nginx_name)
     json_data = resource_management.getMarathonAppJSON(nginx_url)
     app_host = json_data["app"]["tasks"][0]
-    host_string = ""
+    host_string = "http://"
     host_string += app_host["host"]
     host_string += ":"
-    host_string += app_host["port"]
+    host_string += str(app_host["ports"][0])
     return host_string
