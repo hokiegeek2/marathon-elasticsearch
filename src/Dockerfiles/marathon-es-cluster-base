@@ -1,6 +1,6 @@
 FROM centos:7
 
-RUN yum update -y && yum install -y which wget unzip vi
+RUN yum update -y && yum install -y which wget zip unzip vi sudo
 
 WORKDIR /deploy
 
