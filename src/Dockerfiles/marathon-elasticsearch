@@ -1,4 +1,4 @@
-FROM hokiegeek2/marathon-es-cluster-base:20160912
+FROM hokiegeek2/marathon-es-cluster-base
 
 #
 # Install Java
