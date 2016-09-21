@@ -1,4 +1,4 @@
-i#!/bin/bash
+#!/bin/bash
 
 htpasswd -c -b /etc/nginx/.htpasswd $USERNAME $PASSWORD
 
