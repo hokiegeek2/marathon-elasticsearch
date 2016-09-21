@@ -8,6 +8,7 @@ def writeConfFile():
     nodes = getESNodes()
     port = os.getenv("PORT0")
     file_path = os.getenv("CONF_FILE")
+    authenticate = os.getenv("AUTHENTICATE")
     with open(file_path, "wt") as fout:
         fout.write("events {\n")
         fout.write("\t worker_connections  1024;\n")
@@ -19,10 +20,12 @@ def writeConfFile():
         fout.write("\t} \n")
         fout.write("\t server { \n")
         fout.write("\t\t listen " + port + ";\n")
-        fout.write("\t\t auth_basic_user_file /etc/nginx/.htpasswd;\n")
         fout.write("\t\t location / { \n")
-        fout.write("\t\t auth_basic 'Enter Username and Password:'; \n")
-        fout.write("\t\t auth_basic_user_file /etc/nginx/.htpasswd; \n")
+        
+        if (authenticate):
+            fout.write("\t\t auth_basic 'Enter Username and Password:'; \n")
+            fout.write("\t\t auth_basic_user_file /etc/nginx/.htpasswd; \n")
+            
         fout.write("\t\t client_max_body_size 1G; \n")
         fout.write("\t\t\t proxy_pass http://elasticsearch_servers; \n")
         fout.write("\t\t\t proxy_http_version 1.1; \n")
