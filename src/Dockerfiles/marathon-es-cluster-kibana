@@ -1,7 +1,7 @@
 FROM hokiegeek2/marathon-es-cluster-base
 
 # 
-#Install and cleanup Kibana
+# Install and cleanup Kibana rpm
 #
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.5.3-1.x86_64.rpm
 RUN rpm -Uvh kibana-4.5.3-1.x86_64.rpm
@@ -14,4 +14,5 @@ RUN chown -R kibana:kibana /opt/kibana
 EXPOSE 5601
 ENTRYPOINT /deploy/scripts/bootstrap-kibana.sh
 
+# Switch to kibana user
 USER kibana

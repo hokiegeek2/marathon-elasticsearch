@@ -1,4 +1,4 @@
-import os, json
+import os
 from marathon.elasticsearch import resource_management
 
 __all__ = '''
@@ -45,7 +45,22 @@ def getNginxHost():
     json_data = resource_management.getMarathonAppJSON(nginx_url)
     app_host = json_data["app"]["tasks"][0]
     host_string = "http://"
+    host_string += getAuthInfo()
     host_string += app_host["host"]
     host_string += ":"
     host_string += str(app_host["ports"][0])
     return host_string
+
+def generateHostString(app_host):
+    host_string = "http://"
+    host_string += getAuthInfo()
+    host_string += app_host["host"]
+    host_string += ":"
+    host_string += str(app_host["ports"][0])
+
+def getAuthInfo():
+    user = os.getenv("USERNAME")
+    pwd = os.getenv("PASSWORD")
+    if (pwd and user):
+        return user + ":" + pwd + "@"
+    return ""
