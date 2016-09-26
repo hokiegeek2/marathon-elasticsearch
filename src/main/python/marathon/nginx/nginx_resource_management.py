@@ -1,6 +1,5 @@
 import os
 from marathon.elasticsearch import resource_management
-from utils import http_utils
 
 __all__ = '''
 '''.split()
@@ -70,18 +69,8 @@ def getAuthInfo():
     return ""
 
 def testESCluster():
-    nodes = getESNodes()
-    authenticate = False
+    current_nodes = getESNodes().sort().str()
+    original_nodes = os.getenv("ES_NODES")
     
-    if (os.getenv("AUTHENTICATE") != None):
-        authenticate = True
-        user = os.getenv("USERNAME")
-        pwd  = os.getenv("PASSWORD")  
-    
-    for node in nodes:    
-        url = 'http://' + node       
-        if (authenticate):
-            http_utils.getAuthenticatedUrlResponse(url,user,pwd)
-        else:           
-            http_utils.getUrlResponse(url)
-    
+    if (current_nodes != original_nodes):
+        raise ValueError("the current and original nodes don't match, cluster has changed, redeploying")
