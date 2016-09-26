@@ -1,5 +1,6 @@
 import os
 from marathon.elasticsearch import resource_management
+from utils import http_utils
 
 __all__ = '''
 '''.split()
@@ -63,7 +64,20 @@ def generateHostString(app_host):
 
 def getAuthInfo():
     user = os.getenv("USERNAME")
-    pwd = os.getenv("PASSWORD")
+    pwd  = os.getenv("PASSWORD")
     if (pwd and user):
         return user + ":" + pwd + "@"
     return ""
+
+def testESCluster():
+    nodes = getESNodes()
+    authenticate = os.getenv("AUTHENTICATE")
+    user = os.getenv("USERNAME")
+    pwd  = os.getenv("PASSWORD")  
+    
+    for node in nodes:        
+        if (authenticate):
+            http_utils.getAuthenticatedUrlResponse(node,user,pwd)
+        else:
+            http_utils.getUrlResponse(node)
+    
