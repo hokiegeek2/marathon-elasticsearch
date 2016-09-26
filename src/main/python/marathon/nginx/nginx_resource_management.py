@@ -69,7 +69,7 @@ def getAuthInfo():
     return ""
 
 def testESCluster():
-    current_nodes = getESNodes().sort().str()
+    current_nodes = ''.join(getESNodes().sort())
     original_nodes = os.getenv("ES_NODES")
     
     if (current_nodes != original_nodes):
