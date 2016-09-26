@@ -71,13 +71,17 @@ def getAuthInfo():
 
 def testESCluster():
     nodes = getESNodes()
-    authenticate = os.getenv("AUTHENTICATE")
-    user = os.getenv("USERNAME")
-    pwd  = os.getenv("PASSWORD")  
+    authenticate = False
     
-    for node in nodes:        
+    if (os.getenv("AUTHENTICATE") != None):
+        authenticate = True
+        user = os.getenv("USERNAME")
+        pwd  = os.getenv("PASSWORD")  
+    
+    for node in nodes:    
+        url = 'http://' + node       
         if (authenticate):
-            http_utils.getAuthenticatedUrlResponse(node,user,pwd)
-        else:
-            http_utils.getUrlResponse(node)
+            http_utils.getAuthenticatedUrlResponse(url,user,pwd)
+        else:           
+            http_utils.getUrlResponse(url)
     
