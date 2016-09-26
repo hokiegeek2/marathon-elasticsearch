@@ -15,12 +15,10 @@ RUN unzip elasticsearch-2.3.5.zip
 RUN rm /deploy/elasticsearch-2.3.5.zip
 
 #
-# Install Shield
+# Add Shield files to enable authentication/authorization
 #
 ADD shield-2.3.5.zip /deploy/shield-2.3.5.zip
-ADD shield-2.3.5.zip /deploy/license-2.3.5.zip
-RUN elasticsearch-2.3.5/bin/plugin install file:///deploy/license-2.3.5.zip
-RUN elasticsearch-2.3.5/bin/plugin install file:///deploy/shield-2.3.5.zip
+ADD license-2.3.5.zip /deploy/license-2.3.5.zip
 
 #
 # Configure Environment
