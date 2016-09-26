@@ -74,6 +74,5 @@ def testESCluster():
     
     current_nodes_str  = "".join(current_nodes)
     original_nodes_str = os.getenv("ES_NODES")
-    
     if (current_nodes_str != original_nodes_str):
         raise ValueError("the current and original nodes don't match, cluster has changed, redeploying")
