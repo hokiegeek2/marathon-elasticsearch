@@ -39,6 +39,14 @@ def writeConfFile():
         fout.write("}")
         fout.close()
 
+def writeInitialESNodesString(path):
+    nodes = getESNodes()
+    nodes.sort();
+    nodes_string = "".join(nodes)
+    c_file = open(path,"w")
+    c_file.write(nodes_string)
+    c_file.close()
+
 def getESNodes():
     return resource_management.getMarathonESNodes()
 
@@ -68,11 +76,17 @@ def getAuthInfo():
         return user + ":" + pwd + "@"
     return ""
 
-def testESCluster():
+def getInitialESNodesString():
+    return open("/tmp/es_nodes.txt").readlines()[0].rstrip("\n")
+
+def getCurrentESNodesString():
     current_nodes = getESNodes()
-    current_nodes.sort()
-    
-    current_nodes_str  = "".join(current_nodes)
-    original_nodes_str = os.getenv("ES_NODES")
+    current_nodes.sort()  
+    return "".join(current_nodes)
+
+def testESCluster():
+    current_nodes_str = getCurrentESNodesString()
+    original_nodes_str = getInitialESNodesString()
+
     if (current_nodes_str != original_nodes_str):
-        raise ValueError("the current and original nodes don't match, cluster has changed, redeploying")
+        raise ValueError("current and original ES node lists don't match, cluster has changed, will redeploy when max failures threshold is reached")
