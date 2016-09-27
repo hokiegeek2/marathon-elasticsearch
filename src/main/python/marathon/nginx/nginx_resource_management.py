@@ -47,6 +47,12 @@ def writeInitialESNodesString(path):
     c_file.write(nodes_string)
     c_file.close()
 
+def writeInitialNginxHostString(path):
+    host = getNginxHost()
+    h_file = open(path,"w")
+    h_file.write(host)
+    h_file.close()
+
 def getESNodes():
     return resource_management.getMarathonESNodes()
 
@@ -79,6 +85,9 @@ def getAuthInfo():
 def getInitialESNodesString():
     return open("/tmp/es_nodes.txt").readlines()[0].rstrip("\n")
 
+def getInitialNginxHost():
+    return open("/tmp/nginx_host.txt").readlines()[0].rstrip("\n")
+
 def getCurrentESNodesString():
     current_nodes = getESNodes()
     current_nodes.sort()  
@@ -89,4 +98,11 @@ def testESCluster():
     original_nodes_str = getInitialESNodesString()
 
     if (current_nodes_str != original_nodes_str):
-        raise ValueError("current and original ES node lists don't match, cluster has changed, will redeploy when max failures threshold is reached")
+        raise ValueError("current and original ES node lists don't match, cluster has changed, will redeploy nginx when max failures threshold is reached")
+
+def testNginxInstance():
+   current_host = getNginxHost()
+   original_host = getInitialNginxHost()
+    
+   if (current_host != original_host):
+        raise ValueError("current and original nginx hosts don't match, nginx has been redeployed")
