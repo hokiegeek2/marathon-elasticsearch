@@ -78,7 +78,7 @@ def generateHostString(app_host):
 def getAuthInfo():
     user = os.getenv("USERNAME")
     pwd  = os.getenv("PASSWORD")
-    if (pwd and user):
+    if (pwd != None and user != None):
         return user + ":" + pwd + "@"
     return ""
 
