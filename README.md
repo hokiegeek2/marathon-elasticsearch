@@ -26,8 +26,7 @@ MIN_NUM_MASTER_NODES=sets discovery.zen.minimum_master_nodes
 
 CLUSTER_NAME=sets cluster.name
 
-Parameters
-volume=mapping of host directory to container directory
+DATA_DIRECTORIES=sets path.data 
 
 
 #marathon-es-cluster-nginx configuration
