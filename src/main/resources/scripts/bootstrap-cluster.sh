@@ -5,6 +5,7 @@ transport_port=$(python -c 'from marathon.elasticsearch import resource_manageme
 node_name=$(python -c 'from marathon.elasticsearch import resource_management; tp = resource_management.getNodeName(); print(tp)')
 cluster_name=$(python -c 'from marathon.elasticsearch import resource_management; cluster = resource_management.getClusterName(); print(cluster)')
 min_num_master_nodes=$(python -c 'from marathon.elasticsearch import resource_management; master_nodes = resource_management.getMinNumMasterNodes(); print(master_nodes)')
+data_directories=$(python -c 'from marathon.elasticsearch import resource_management; data_dir = resource_management.getDataDirectories(); print(data_dir)')
 
 exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --node.name=$node_name \
@@ -19,4 +20,5 @@ exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --discovery.zen.publish_timeout=300s \
 --http.port=9200 \
 --transport.tcp.port=$transport_port \
---transport.publish_port=$PORT1
+--transport.publish_port=$PORT1 \
+--path.data=$data_directories

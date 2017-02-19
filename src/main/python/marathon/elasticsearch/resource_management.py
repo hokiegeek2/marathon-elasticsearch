@@ -78,6 +78,9 @@ def getMinNumMasterNodes():
         raise ValueError("MIN_NUM_MASTER_NODES environment variable must be set") 
     return min_num_master_nodes
 
+def getDataDirectories():
+    return os.getenv("DATA_DIRECTORIES","/data")
+
 def getClusterName():
     cluster_name = os.getenv("CLUSTER_NAME")
     if cluster_name == None:
