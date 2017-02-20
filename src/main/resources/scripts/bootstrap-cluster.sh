@@ -21,4 +21,5 @@ exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --http.port=9200 \
 --transport.tcp.port=$transport_port \
 --transport.publish_port=$PORT1 \
---path.data=$data_directories
+--path.data=$data_directories \
+--action.destructive_requires_name=true

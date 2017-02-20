@@ -11,7 +11,6 @@ I've converted all service discovery logic to Python and added a few more elemen
 3. Load balancing and password-protected access to cluster with nginx
 4. Cluster-level kibana analysis via kibana-nginx proxy interface
 
-
 #marathon-elasticsearch configuration
 
 Environment
@@ -28,6 +27,11 @@ CLUSTER_NAME=sets cluster.name
 
 DATA_DIRECTORIES=sets path.data 
 
+Elasticsearch Defaults
+----------------------
+path.data=/data
+action.destructive_requires_name=true
+cluster.name=Marathon-ES-Cluster
 
 #marathon-es-cluster-nginx configuration
 
