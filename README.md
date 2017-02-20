@@ -30,7 +30,9 @@ DATA_DIRECTORIES=sets path.data
 Elasticsearch Defaults
 ----------------------
 path.data=/data
+
 action.destructive_requires_name=true
+
 cluster.name=Marathon-ES-Cluster
 
 #marathon-es-cluster-nginx configuration
