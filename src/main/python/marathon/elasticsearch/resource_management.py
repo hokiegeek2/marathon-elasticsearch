@@ -8,18 +8,26 @@ __all__ = '''
   getMarathonAppPorts
   '''.split()
 
+def _getEnvVariable(name):
+    e_value = os.getenv(name)
+    if e_value == None:
+        raise ValueError(name + " environment variable must be set")
+    return e_value
+
 def getNetworkMode():
-    return os.getenv("NETWORK_MODE")
+    network_mode = os.getenv("NETWORK_MODE")
+    if network_mode != "BRIDGE" and network_mode != "HOST":
+        raise ValueError("The NETWORK_MODE environment variable must be set to BRIDGE or HOST")
+    return network_mode
+
 
 def getTransportBindPort():
-    mode = getNetworkMode()
-    if mode == "BRIDGE":
+    network_mode = getNetworkMode()
+    if network_mode == "BRIDGE":
         return 9300
-    if (mode == "HOST"):
-        return int(os.getenv("PORT1"))
     else:
-        raise ValueError("The NETWORK_MODE environment variable must equal BRIDGE or HOST")
-
+        return int(os.getenv("PORT1"))
+ 
 def getNodeName():
     nodeName = ""
     nodeName += os.getenv("HOST")
@@ -28,16 +36,16 @@ def getNodeName():
     return nodeName
 
 def getAppNames():
-    appNames = os.getenv("APP_NAME")
+    appNames = _getEnvVariable("APP_NAME")
     if "," in appNames:
         return appNames.split(",")
     return [appNames]
 
 def getAppURL(appName):
-    return os.getenv("MARATHON_URL") + "/v2/apps/" + appName
+    return _getEnvVariable("MARATHON_URL") + "/v2/apps/" + appName
 
 def getHost():
-    return os.getenv("HOST")
+    return _getEnvVariable("HOST")
     
 def getMarathonAppJSON(url):
     raw_json = os.popen("curl " + url).read()
@@ -82,7 +90,15 @@ def getDataDirectories():
     return os.getenv("DATA_DIRECTORIES","/data")
 
 def getClusterName():
-    cluster_name = os.getenv("CLUSTER_NAME")
-    if cluster_name == None:
-        cluster_name = "Marathon-ES-Cluster"
-    return cluster_name
+    return os.getenv("CLUSTER_NAME","Marathon-ES-Cluster")
+
+def getNodeType():
+    node_type = os.getenv("ES_NODE_TYPE")
+    if node_type == "DATA_NODE_ONLY":
+        return "--node.data=true --node.master=false"
+    elif node_type == "MASTER_NODE_ONLY":
+        return "--node.data=false"
+    elif node_type == "CLIENT_NODE_ONLY":
+        return "--node.data=false --node.master=false"
+    else:
+        return "--node.data=true"

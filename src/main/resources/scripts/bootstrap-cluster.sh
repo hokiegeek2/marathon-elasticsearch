@@ -6,6 +6,7 @@ node_name=$(python -c 'from marathon.elasticsearch import resource_management; t
 cluster_name=$(python -c 'from marathon.elasticsearch import resource_management; cluster = resource_management.getClusterName(); print(cluster)')
 min_num_master_nodes=$(python -c 'from marathon.elasticsearch import resource_management; master_nodes = resource_management.getMinNumMasterNodes(); print(master_nodes)')
 data_directories=$(python -c 'from marathon.elasticsearch import resource_management; data_dir = resource_management.getDataDirectories(); print(data_dir)')
+node_type=$(python -c 'from marathon.elasticsearch import resource_management; nt = resource_management.getNodeType(); print (nt)')
 
 exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --node.name=$node_name \
@@ -22,4 +23,5 @@ exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
 --transport.tcp.port=$transport_port \
 --transport.publish_port=$PORT1 \
 --path.data=$data_directories \
---action.destructive_requires_name=true
+--action.destructive_requires_name=true \
+$node_type
