@@ -29,16 +29,16 @@ def getTransportBindPort():
     if network_mode == "BRIDGE":
         return 9300
     else:
-        return int(os.getenv("PORT1"))
+        return int(_getEnvVariable("PORT1"))
 
 def getHttpPublishPort():
-    return int(getEnv("PORT0"))
+    return int(_getEnvVariable("PORT0"))
       
 def getNodeName():
     nodeName = ""
-    nodeName += os.getenv("HOST")
+    nodeName += _getEnvVariable("HOST")
     nodeName += ":"
-    nodeName += str(os.getenv("PORT0"))
+    nodeName += str(_getEnvVariable("PORT0"))
     return nodeName
 
 def _getAppNames():
@@ -58,7 +58,7 @@ def getMarathonAppJSON(url):
     return json.loads(raw_json)
 
 def getMarathonAppHosts():
-    appNames = getAppNames()
+    appNames = _getAppNames()
    
     hosts = ""
     for app in appNames:
@@ -72,12 +72,13 @@ def getMarathonAppHosts():
     return hosts.strip(",")
 
 def getMarathonESNodes():
-    appNames = getAppNames()
+    appNames = _getAppNames()
     nodes = list()
     for app in appNames:
         url = getAppURL(app)
         app_json = getMarathonAppJSON(url)
-
+        if app_json == None:
+            raise ValueError("The APP_NAME is incorrect, please check and reconfigure")       
         for app in app_json["app"]["tasks"]:
             node = ""
             node += app["host"]
@@ -87,7 +88,7 @@ def getMarathonESNodes():
     return nodes 
 
 def getMinNumMasterNodes():
-    min_num_master_nodes = os.getenv("MIN_NUM_MASTER_NODES")
+    min_num_master_nodes = _getEnvVariable("MIN_NUM_MASTER_NODES")
     if min_num_master_nodes == None:
         raise ValueError("MIN_NUM_MASTER_NODES environment variable must be set") 
     return min_num_master_nodes
