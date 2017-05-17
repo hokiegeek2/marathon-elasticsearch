@@ -14,6 +14,9 @@ def _getEnvVariable(name):
         raise ValueError(name + " environment variable must be set")
     return e_value
 
+def _getEnvVariableWithDefault(name,default):
+    return os.getenv(name,default)
+
 def getNetworkMode():
     network_mode = os.getenv("NETWORK_MODE")
     if network_mode != "BRIDGE" and network_mode != "HOST":
@@ -27,7 +30,10 @@ def getTransportBindPort():
         return 9300
     else:
         return int(os.getenv("PORT1"))
- 
+
+def getHttpPublishPort():
+    return int(getEnv("PORT0"))
+      
 def getNodeName():
     nodeName = ""
     nodeName += os.getenv("HOST")
@@ -35,7 +41,7 @@ def getNodeName():
     nodeName += str(os.getenv("PORT0"))
     return nodeName
 
-def getAppNames():
+def _getAppNames():
     appNames = _getEnvVariable("APP_NAME")
     if "," in appNames:
         return appNames.split(",")
@@ -87,13 +93,13 @@ def getMinNumMasterNodes():
     return min_num_master_nodes
 
 def getDataDirectories():
-    return os.getenv("DATA_DIRECTORIES","/data")
+    return _getEnvVariableWithDefault("DATA_DIRECTORIES","/data")
 
 def getClusterName():
-    return os.getenv("CLUSTER_NAME","Marathon-ES-Cluster")
+    return _getEnvVariableWithDefault("CLUSTER_NAME","MARATHON-ES-CLUSTER")
 
 def getNodeType():
-    node_type = os.getenv("ES_NODE_TYPE")
+    node_type = _getEnvVariable("ES_NODE_TYPE")
     if node_type == "DATA_NODE_ONLY":
         return "--node.data=true --node.master=false"
     elif node_type == "MASTER_NODE_ONLY":
