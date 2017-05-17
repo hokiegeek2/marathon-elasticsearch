@@ -5,10 +5,10 @@ __all__ = '''
 '''.split()
 
 def writeConfFile():
-    nodes = getESNodes()
+    nodes = _getESNodes()
     port = os.getenv("PORT0")
     file_path = os.getenv("CONF_FILE")
-    authenticate = os.getenv("AUTHENTICATE")
+    authenticate = os.getenv("AUTHENTICATE", False)
     with open(file_path, "wt") as fout:
         fout.write("events {\n")
         fout.write("\t worker_connections  1024;\n")
@@ -40,7 +40,7 @@ def writeConfFile():
         fout.close()
 
 def writeInitialESNodesString(path):
-    nodes = getESNodes()
+    nodes = _getESNodes()
     nodes.sort();
     nodes_string = "".join(nodes)
     c_file = open(path,"w")
@@ -48,15 +48,15 @@ def writeInitialESNodesString(path):
     c_file.close()
 
 def writeInitialNginxHostString(path):
-    host = getNginxHost()
+    host = _getNginxHost()
     h_file = open(path,"w")
     h_file.write(host)
     h_file.close()
 
-def getESNodes():
+def _getESNodes():
     return resource_management.getMarathonESNodes()
 
-def getNginxHost():
+def _getNginxHost():
     nginx_name = os.getenv("NGINX_APP_NAME")
     nginx_url = resource_management.getAppURL(nginx_name)
     json_data = resource_management.getMarathonAppJSON(nginx_url)
@@ -85,11 +85,11 @@ def getAuthInfo():
 def getInitialESNodesString():
     return open("/tmp/es_nodes.txt").readlines()[0].rstrip("\n")
 
-def getInitialNginxHost():
+def _getInitialNginxHost():
     return open("/tmp/nginx_host.txt").readlines()[0].rstrip("\n")
 
 def getCurrentESNodesString():
-    current_nodes = getESNodes()
+    current_nodes = _getESNodes()
     current_nodes.sort()  
     return "".join(current_nodes)
 
