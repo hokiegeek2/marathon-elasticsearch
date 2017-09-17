@@ -35,8 +35,6 @@ action.destructive_requires_name=true
 
 cluster.name=Marathon-ES-Cluster
 
-#marathon-es-cluster-nginx configuration
-
 Environment
 -----------
 MARATHON_URL=http://<dns name or ip address of Marathon host>:8080
@@ -48,7 +46,6 @@ CONF_FILE=/etc/nginx/nginx.conf (default) this is where the conf file is generat
 USERNAME=nginx username
 
 PASSWORD=nginx password
-
 
 #marathon-es-cluster-kibana configuration
 
