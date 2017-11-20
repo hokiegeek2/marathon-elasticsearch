@@ -3,16 +3,21 @@ FROM hokiegeek2/marathon-es-cluster-base
 #
 # Install Java
 #
-RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.rpm
-RUN yum install -y jdk-8u66-linux-x64.rpm
-RUN rm /deploy/jdk-8u66-linux-x64.rpm
-
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/cache/oracle-jdk8-installer
+  
 #
 # Install Elasticsearch and cleanup
 #
-ADD elasticsearch-2.3.5.zip /deploy/elasticsearch-2.3.5.zip
-RUN unzip elasticsearch-2.3.5.zip
-RUN rm /deploy/elasticsearch-2.3.5.zip
+ADD https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.zip \
+  /deploy/elasticsearch-5.4.0.zip
+RUN unzip elasticsearch-5.4.0.zip
+RUN rm /deploy/elasticsearch-5.4.0.zip
 
 #
 # Configure Environment
@@ -27,6 +32,7 @@ RUN mkdir /data
 RUN chmod 777 /data
 RUN useradd -u 1206 -r elasticsearch
 RUN chown -R elasticsearch:elasticsearch /deploy
+RUN addgroup wheel
 RUN usermod -aG wheel elasticsearch
 RUN sed -i 's/Defaults[ ]* requiretty/#Defaults      requiretty/g' /etc/sudoers
 RUN echo "elasticsearch ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
