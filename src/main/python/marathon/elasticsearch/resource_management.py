@@ -18,11 +18,7 @@ def _getEnvVariableWithDefault(name,default):
     return os.getenv(name,default)
 
 def getNetworkMode():
-    network_mode = os.getenv("NETWORK_MODE")
-    if network_mode != "BRIDGE" and network_mode != "HOST":
-        raise ValueError("The NETWORK_MODE environment variable must be set to BRIDGE or HOST")
-    return network_mode
-
+    return _getEnvVariableWithDefault("NETWORK_MODE","HOST")
 
 def getTransportBindPort():
     network_mode = getNetworkMode()
@@ -88,7 +84,7 @@ def getMarathonESNodes():
     return nodes 
 
 def getMinNumMasterNodes():
-    min_num_master_nodes = _getEnvVariable("MIN_NUM_MASTER_NODES")
+    min_num_master_nodes = _getEnvVariableWithDefault("MIN_NUM_MASTER_NODES","1")
     if min_num_master_nodes == None:
         raise ValueError("MIN_NUM_MASTER_NODES environment variable must be set") 
     return min_num_master_nodes
@@ -100,7 +96,7 @@ def getClusterName():
     return _getEnvVariableWithDefault("CLUSTER_NAME","MARATHON-ES-CLUSTER")
 
 def getNodeType():
-    node_type = _getEnvVariable("ES_NODE_TYPE")
+    node_type = _getEnvVariableWithDefault("ES_NODE_TYPE","DATA_NODE")
     if node_type == "DATA_NODE_ONLY":
         return "--node.data=true --node.master=false"
     elif node_type == "MASTER_NODE_ONLY":

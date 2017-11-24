@@ -17,6 +17,7 @@ RUN \
 ADD https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.zip \
   /deploy/elasticsearch-5.4.0.zip
 RUN unzip elasticsearch-5.4.0.zip
+RUN ln -s /deploy/elasticsearch-5.4.0 /deploy/elasticsearch
 RUN rm /deploy/elasticsearch-5.4.0.zip
 
 #

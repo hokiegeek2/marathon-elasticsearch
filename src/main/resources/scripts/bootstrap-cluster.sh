@@ -8,7 +8,7 @@ min_num_master_nodes=$(python -c 'from marathon.elasticsearch import resource_ma
 data_directories=$(python -c 'from marathon.elasticsearch import resource_management; data_dir = resource_management.getDataDirectories(); print(data_dir)')
 node_type=$(python -c 'from marathon.elasticsearch import resource_management; nt = resource_management.getNodeType(); print (nt)')
 
-exec /deploy/elasticsearch-2.3.5/bin/elasticsearch \
+exec /deploy/elasticsearch/bin/elasticsearch \
 --node.name=$node_name \
 --cluster.name=$cluster_name \
 --network.bind_host=0.0.0.0 \

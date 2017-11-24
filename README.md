@@ -15,9 +15,9 @@ I've converted all service discovery logic to Python and added a few more elemen
 
 Environment
 -----------
-MARATHON_URL=http://<dns name or ip address of Marathon host>:8080
+MARATHON_URL (Required)=http://<dns name or ip address of Marathon host>:8080
 
-APP_NAME=comma-delimited list of Marathon Elasticsearch node application names
+APP_NAME (Required)=comma-delimited list of Marathon Elasticsearch node application names
 
 NETWORK_MODE=HOST or BRIDGE
 
@@ -27,13 +27,19 @@ CLUSTER_NAME=sets cluster.name
 
 DATA_DIRECTORIES=sets path.data 
 
-Elasticsearch Defaults
+Defaults
 ----------------------
 path.data=/data
 
 action.destructive_requires_name=true
 
 cluster.name=Marathon-ES-Cluster
+
+discovery.zen.minimum_master_nodes=1
+
+node.data=true
+
+NETWORK_MODE=HOST
 
 Environment
 -----------
