@@ -1,6 +1,6 @@
 # marathon-elasticsearch 
 
-This is a framework based upon the outstanding work of Chris Kite @ https://github.com/chriskite/elasticsearch-marathon. This framework features deployment of an Elasticsearch cluster on Marathon, using a bootstrap script approach for service discovery of all ES nodes within a cluster. All components of the framework are deployed as Docker containers that extend the official centos:7 image.
+This is a framework based upon the outstanding work of Chris Kite @ https://github.com/chriskite/elasticsearch-marathon. This framework features deployment of an Elasticsearch cluster on Marathon, using a bootstrap script approach for service discovery of all ES nodes within a cluster. All components of the framework are deployed as Docker containers that extend the hokiegeek2/ubuntu image.
 
 Additional Features
 -------------------
@@ -9,7 +9,7 @@ I've converted all service discovery logic to Python and added a few more elemen
 1. Option for Bridge or Host networking for ES nodes
 2. Extension of service discovery to enable clustering across Marathon applications and Marathon application groups
 3. Load balancing and password-protected access to cluster with nginx
-4. Cluster-level kibana analysis via kibana-nginx proxy interface
+4. Cluster-level Kibana analysis via Kibana-nginx proxy interface
 
 # marathon-elasticsearch configuration
 
@@ -41,9 +41,11 @@ node.data=true
 
 NETWORK_MODE=HOST
 
+# marathon-es-cluster-nginx configuration
+
 Environment
 -----------
-MARATHON_URL=http://<dns name or ip address of Marathon host>:8080
+MARATHON_URL=http://<dns name or ip address of Marathon host>:<port>
 
 APP_NAME=comma-delimited list of Marathon Elasticsearch node application names
 
@@ -57,7 +59,7 @@ PASSWORD=nginx password
 
 Environment
 -----------
-MARATHON_URL=http://<dns name or ip address of Marathon host>:8080
+MARATHON_URL=http://<dns name or ip address of Marathon host>:<port>
 
 NGINX_APP_NAME=comma-delimited list of Marathon application names
 
