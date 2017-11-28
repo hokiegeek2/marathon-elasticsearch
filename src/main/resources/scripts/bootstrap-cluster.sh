@@ -9,19 +9,18 @@ data_directories=$(python -c 'from marathon.elasticsearch import resource_manage
 node_type=$(python -c 'from marathon.elasticsearch import resource_management; nt = resource_management.getNodeType(); print (nt)')
 
 exec /deploy/elasticsearch/bin/elasticsearch \
---node.name=$node_name \
---cluster.name=$cluster_name \
---network.bind_host=0.0.0.0 \
---network.publish_host=$host \
---discovery.zen.minimum_master_nodes=$min_num_master_nodes \
---discovery.zen.ping.multicast.enabled=false \
---discovery.zen.ping.unicast.hosts=$hosts \
---discovery.zen.ping_timeout=90s \
---discovery.zen.join_timeout=300s \
---discovery.zen.publish_timeout=300s \
---http.port=9200 \
---transport.tcp.port=$transport_port \
---transport.publish_port=$PORT1 \
---path.data=$data_directories \
---action.destructive_requires_name=true \
+-Enode.name=$node_name \
+-Ecluster.name=$cluster_name \
+-Enetwork.bind_host=0.0.0.0 \
+-Enetwork.publish_host=$host \
+-Ediscovery.zen.minimum_master_nodes=$min_num_master_nodes \
+-Ediscovery.zen.ping.unicast.hosts=$hosts \
+-Ediscovery.zen.ping_timeout=90s \
+-Ediscovery.zen.join_timeout=300s \
+-Ediscovery.zen.publish_timeout=300s \
+-Ehttp.port=9200 \
+-Etransport.tcp.port=$transport_port \
+-Etransport.publish_port=$PORT1 \
+-Epath.data=$data_directories \
+-Eaction.destructive_requires_name=true \
 $node_type

@@ -1,11 +1,11 @@
-FROM hokiegeek2/ubuntu
+FROM centos:7
 
-RUN apt-get update -y && apt-get install -y \
+RUN yum update -y && yum install -y \
     wget zip unzip vim sudo curl software-properties-common
 
 WORKDIR /deploy
 
-RUN ln -s /usr/bin/python3 /usr/bin/python
+#RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #
 # Add python and bootstrap scripts as well as json configs

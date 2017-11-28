@@ -3,13 +3,9 @@ FROM hokiegeek2/marathon-es-cluster-base
 #
 # Install Java
 #
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
+WORKDIR /deploy
+RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.rpm
+RUN yum install -y jdk-8u66-linux-x64.rpm
   
 #
 # Install Elasticsearch and cleanup

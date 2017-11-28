@@ -98,10 +98,10 @@ def getClusterName():
 def getNodeType():
     node_type = _getEnvVariableWithDefault("ES_NODE_TYPE","DATA_NODE")
     if node_type == "DATA_NODE_ONLY":
-        return "--node.data=true --node.master=false"
+        return "-Enode.data=true -Enode.master=false"
     elif node_type == "MASTER_NODE_ONLY":
-        return "--node.data=false"
+        return "-Enode.data=false"
     elif node_type == "CLIENT_NODE_ONLY":
-        return "--node.data=false --node.master=false"
+        return "-Enode.data=false -Enode.master=false"
     else:
-        return "--node.data=true"
+        return "-Enode.data=true"
