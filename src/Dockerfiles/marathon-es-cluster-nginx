@@ -1,12 +1,11 @@
 FROM hokiegeek2/marathon-es-cluster-base
 
-RUN yum install -y epel-release 
-RUN yum install -y nginx
-RUN yum install -y httpd-tools
+MAINTAINER hokiegeek2@gmail.com
+
+RUN yum install -y epel-release nginx httpd-tools
 
 ENTRYPOINT /deploy/scripts/bootstrap-nginx.sh
 
 # Expose ports.
 EXPOSE 80
 EXPOSE 443
-

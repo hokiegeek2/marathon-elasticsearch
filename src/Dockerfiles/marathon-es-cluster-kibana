@@ -1,5 +1,7 @@
 FROM hokiegeek2/marathon-es-cluster-base
 
+MAINTAINER hokiegeek2@gmail.com
+
 # 
 # Install and cleanup Kibana rpm
 #
