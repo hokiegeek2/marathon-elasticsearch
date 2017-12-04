@@ -1,0 +1,30 @@
+FROM hokiegeek2/centos-java
+
+MAINTAINER hokiegeek2@gmail.com
+
+#
+# Install Elasticsearch and cleanup
+#
+ADD https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/zip/elasticsearch/2.3.5/elasticsearch-2.3.5.zip \
+  /deploy/elasticsearch-2.3.5.zip
+RUN unzip elasticsearch-2.3.5.zip
+RUN ln -s /deploy/elasticsearch-2.3.5 /deploy/elasticsearch
+RUN rm /deploy/elasticsearch-2.3.5.zip
+
+#
+# Configure Environment
+#
+EXPOSE 9200 9300
+ENTRYPOINT /deploy/scripts/bootstrap-cluster.sh
+
+#
+# Provision elasticsearch user
+#
+RUN mkdir /data
+RUN chmod 777 /data
+RUN useradd -u 1206 -r elasticsearch
+RUN chown -R elasticsearch:elasticsearch /deploy
+RUN usermod -aG wheel elasticsearch
+RUN sed -i 's/Defaults[ ]* requiretty/#Defaults      requiretty/g' /etc/sudoers
+RUN echo "elasticsearch ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER elasticsearch
