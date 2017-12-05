@@ -56,7 +56,7 @@ def writeInitialNginxHostString(path):
 def _getESNodes():
     return resource_management.getMarathonESNodes()
 
-def _getNginxHost():
+def getNginxHost():
     nginx_name = os.getenv("NGINX_APP_NAME")
     nginx_url = resource_management.getAppURL(nginx_name)
     json_data = resource_management.getMarathonAppJSON(nginx_url)
