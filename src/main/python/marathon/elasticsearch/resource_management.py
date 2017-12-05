@@ -8,46 +8,49 @@ __all__ = '''
   getMarathonAppPorts
   '''.split()
 
-def _getEnvVariable(name):
-    e_value = os.getenv(name)
-    if e_value == None:
-        raise ValueError(name + " environment variable must be set")
-    return e_value
-
-def _getEnvVariableWithDefault(name,default):
-    return os.getenv(name,default)
+def _getEnvVariable(name, default):
+    if default != None:
+       return os.getenv(name, default)
+    else:
+       value = os.getenv(name)
+       if value == None:
+           raise ValueError(name + " environment variable must be set")
+       return value
 
 def getNetworkMode():
-    return _getEnvVariableWithDefault("NETWORK_MODE","HOST")
+    network_mode = _getEnvVariable("NETWORK_MODE","HOST")
+    if network_mode != "BRIDGE" and network_mode != "HOST):
+        raise ValueError("The NETWORK_MODE environment variable must equal BRIDGE or HOST")
+    return network_mode
 
 def getTransportBindPort():
-    network_mode = getNetworkMode()
+    network_mode = _getNetworkMode()
     if network_mode == "BRIDGE":
         return 9300
     else:
-        return int(_getEnvVariable("PORT1"))
+        return int(_getEnvVariable("PORT1", None))
 
 def getHttpPublishPort():
-    return int(_getEnvVariable("PORT0"))
+    return _getEnvVariable("PORT0", None)
       
 def getNodeName():
     nodeName = ""
-    nodeName += _getEnvVariable("HOST")
+    nodeName += _getHost()
     nodeName += ":"
-    nodeName += str(_getEnvVariable("PORT0"))
+    nodeName += _getHttpPublishPort()
     return nodeName
 
-def _getAppNames():
-    appNames = _getEnvVariable("APP_NAME")
+def getAppNames():
+    appNames = _getEnvVariable("APP_NAME", None)
     if "," in appNames:
         return appNames.split(",")
     return [appNames]
 
 def getAppURL(appName):
-    return _getEnvVariable("MARATHON_URL") + "/v2/apps/" + appName
+    return _getEnvVariable("MARATHON_URL", None) + "/v2/apps/" + appName
 
-def getHost():
-    return _getEnvVariable("HOST")
+def _getHost():
+    return _getEnvVariable("HOST", None)
     
 def getMarathonAppJSON(url):
     raw_json = os.popen("curl " + url).read()
@@ -84,19 +87,16 @@ def getMarathonESNodes():
     return nodes 
 
 def getMinNumMasterNodes():
-    min_num_master_nodes = _getEnvVariableWithDefault("MIN_NUM_MASTER_NODES","1")
-    if min_num_master_nodes == None:
-        raise ValueError("MIN_NUM_MASTER_NODES environment variable must be set") 
-    return min_num_master_nodes
-
+    return _getEnvVariable("MIN_NUM_MASTER_NODES","1")
+  
 def getDataDirectories():
-    return _getEnvVariableWithDefault("DATA_DIRECTORIES","/data")
+    return _getEnvVariable("DATA_DIRECTORIES","/data")
 
 def getClusterName():
-    return _getEnvVariableWithDefault("CLUSTER_NAME","MARATHON-ES-CLUSTER")
+    return _getEnvVariable("CLUSTER_NAME","MARATHON-ES-CLUSTER")
 
 def getNodeType():
-    node_type = _getEnvVariableWithDefault("ES_NODE_TYPE","DATA_NODE")
+    node_type = _getEnvVariable("ES_NODE_TYPE","DATA_NODE")
     if node_type == "DATA_NODE_ONLY":
         return "-Enode.data=true -Enode.master=false"
     elif node_type == "MASTER_NODE_ONLY":
