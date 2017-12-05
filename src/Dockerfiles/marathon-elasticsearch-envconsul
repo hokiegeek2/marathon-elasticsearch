@@ -1,0 +1,7 @@
+FROM hokiegeek2/marathon-elasticsearch
+
+MAINTAINER hokiegeek2@gmail.com
+
+ADD envconsul /opt/envconsul
+
+ENTRYPOINT /opt/envconsul -consul=$CONSUL_URL -prefix /opt/marathon-elasticsearch -upcase /deploy/scripts/bootstrap-cluster.sh
