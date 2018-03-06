@@ -2,13 +2,14 @@ import os,json
 
 min_num_master_nodes = None
 cluster_name = None
+es_java_opts = '-Xms2g -Xmx2g -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError -XX:+AlwaysPreTouch -server -Xss1m -Dlog4j.shutdownHookEnabled=false -Dlog4j2.disable.jmx=true'
 
 __all__ = '''
   getMarathonAppJSON
   getMarathonAppPorts
   '''.split()
 
-def _getEnvVariable(name, default):
+def _getEnvVariable(name, default=None):
     if default != None:
        return os.getenv(name, default)
     else:
@@ -17,39 +18,39 @@ def _getEnvVariable(name, default):
            raise ValueError(name + " environment variable must be set")
        return value
 
+def getJvmOptions():
+    return _getEnvVariable("JVM_OPTIONS",es_java_opts)
+    
 def getNetworkMode():
-    network_mode = _getEnvVariable("NETWORK_MODE","HOST")
-    if network_mode != "BRIDGE" and network_mode != "HOST):
-        raise ValueError("The NETWORK_MODE environment variable must equal BRIDGE or HOST")
-    return network_mode
+    return _getEnvVariable("NETWORK_MODE","HOST")
 
 def getTransportBindPort():
-    network_mode = _getNetworkMode()
+    network_mode = getNetworkMode()
     if network_mode == "BRIDGE":
         return 9300
     else:
-        return int(_getEnvVariable("PORT1", None))
+        return int(_getEnvVariable("PORT1"))
 
 def getHttpPublishPort():
-    return _getEnvVariable("PORT0", None)
+    return _getEnvVariable("PORT0")
       
 def getNodeName():
     nodeName = ""
-    nodeName += _getHost()
+    nodeName += getHost()
     nodeName += ":"
     nodeName += _getHttpPublishPort()
     return nodeName
 
 def getAppNames():
-    appNames = _getEnvVariable("APP_NAME", None)
+    appNames = _getEnvVariable("APP_NAME")
     if "," in appNames:
         return appNames.split(",")
     return [appNames]
 
 def getAppURL(appName):
-    return _getEnvVariable("MARATHON_URL", None) + "/v2/apps/" + appName
+    return _getEnvVariable("MARATHON_URL") + "/v2/apps/" + appName
 
-def _getHost():
+def getHost():
     return _getEnvVariable("HOST", None)
     
 def getMarathonAppJSON(url):
