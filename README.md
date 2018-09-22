@@ -10,7 +10,7 @@ I've converted all service discovery logic to Python and added a few more elemen
 2. Extension of service discovery to enable clustering across Marathon applications and Marathon application groups
 3. Load balancing and password-protected access to cluster with nginx
 4. Cluster-level Kibana analysis via Kibana-nginx proxy interface
-5. Specify mix of client-only, data-only, master-only, and data
+5. Specify mix of client-only, data-only, master-only, and data nodes
 
 # marathon-elasticsearch configuration
 
